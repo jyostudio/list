@@ -1,0 +1,35 @@
+{
+  "name": "@jyostudio/list",
+  "version": "0.0.1",
+  "description": "list",
+  "source": "src/list.js",
+  "main": "src/list.js",
+  "unpkg": "dist/list.js",
+  "jsdelivr": "dist/list.js",
+  "type": "module",
+  "types": "types/list.d.ts",
+  "typings": "types/list.d.ts",
+  "scripts": {
+    "publish": "npm publish --access public",
+    "build": "esbuild src/list.js --bundle --minify --sourcemap --format=esm --outfile=dist/list.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jyostudio/list.git"
+  },
+  "keywords": [
+    "list"
+  ],
+  "author": "nivk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jyostudio/list/issues"
+  },
+  "homepage": "https://github.com/jyostudio/list#readme",
+  "devDependencies": {
+    "esbuild": "^0.23.0"
+  },
+  "peerDependencies": {
+    "@jyostudio/overload": "^0.0.9"
+  }
+}
