@@ -1,6 +1,6 @@
 {
   "name": "@jyostudio/list",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "list",
   "source": "src/list.js",
   "main": "src/list.js",
