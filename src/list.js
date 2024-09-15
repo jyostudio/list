@@ -55,7 +55,18 @@ export default class List {
                 function (innerType, list) {
                     this.#innerType = innerType;
                     for (let item of list) this.add(item);
-                });
+                })
+            .add([Function, Number], function (innerType, count) {
+                this.#innerType = innerType;
+                let defaultValue;
+                if (innerType === Number) defaultValue = 0;
+                else if (innerType === String) defaultValue = "";
+                else if (innerType === Boolean) defaultValue = false;
+                else if (innerType === BigInt) defaultValue = BigInt(0);
+                else if (innerType === Symbol) defaultValue = Symbol();
+                else defaultValue = null;
+                for (let i = 0; i < count; i++) this.add(innerType?.["##STRUCT_CONSTURCTOR##"]?.() || defaultValue);
+            });
 
         return List.#_constructor.call(this, ...params);
     };
