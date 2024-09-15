@@ -173,7 +173,7 @@ export default class List<T> extends ReadOnlyList<T> {
    * 添加一个元素
    * @param item 要添加的元素
    */
-  add(item: T): void;
+  add(item: T | null): void;
 
   /**
    * 添加一组元素
@@ -203,7 +203,7 @@ export default class List<T> extends ReadOnlyList<T> {
    * @param index 索引
    * @param item 要插入的元素
    */
-  insert(index: Number, item: T): void;
+  insert(index: Number, item: T | null): void;
 
   /**
    * 将集合的元素插入 List 的指定索引处

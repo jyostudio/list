@@ -148,10 +148,10 @@ export default class List {
     }
 
     add(...params) {
-        this.add = overload([this.#innerType],
+        this.add = overload([[this.#innerType, null]],
             /**
              * @this {List<T>}
-             * @param {T} item 
+             * @param {T | null} item 
              */
             function (item) {
                 this.#list.push(item);
@@ -404,11 +404,11 @@ export default class List {
     }
 
     insert(...params) {
-        this.insert = overload([Number, this.#innerType],
+        this.insert = overload([Number, [this.#innerType, null]],
             /**
              * @this {List<T>}
              * @param {Number} index - 索引
-             * @param {T} item - 项目
+             * @param {T | null} item - 项目
              */
             function (index, item) {
                 this.#rangeCheck(index);
