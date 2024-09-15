@@ -163,6 +163,13 @@ export default class List<T> extends ReadOnlyList<T> {
   constructor(innerType: T, list: T[] | List<T>);
 
   /**
+   * 初始化 List 类的新实例
+   * @param innerType 元素类型
+   * @param count 初始容量
+   */
+  constructor(innerType: T, count: Number);
+
+  /**
    * 添加一个元素
    * @param item 要添加的元素
    */
