@@ -1,6 +1,6 @@
 {
   "name": "@jyostudio/list",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "list",
   "source": "src/list.js",
   "main": "src/list.js",
@@ -30,6 +30,6 @@
     "esbuild": "^0.23.0"
   },
   "peerDependencies": {
-    "@jyostudio/overload": "^0.0.11"
+    "@jyostudio/overload": "^0.0.12"
   }
 }
