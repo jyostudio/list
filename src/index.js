@@ -1,4 +1,3 @@
-/// <reference path="../types/list.d.ts" />
 import overload from "@jyostudio/overload";
 
 /**
@@ -54,18 +53,24 @@ export default class List {
                  */
                 function (innerType, list) {
                     this.#innerType = innerType;
-                    for (let item of list) this.add(item);
+                    for (let item of list) {
+                        this.add(item);
+                    }
                 })
             .add([Function, Number], function (innerType, count) {
                 this.#innerType = innerType;
                 let defaultValue;
+
                 if (innerType === Number) defaultValue = 0;
                 else if (innerType === String) defaultValue = "";
                 else if (innerType === Boolean) defaultValue = false;
                 else if (innerType === BigInt) defaultValue = BigInt(0);
                 else if (innerType === Symbol) defaultValue = Symbol();
                 else defaultValue = null;
-                for (let i = 0; i < count; i++) this.add(innerType?.["##STRUCT_CONSTURCTOR##"]?.() || defaultValue);
+
+                for (let i = 0; i < count; i++) {
+                    this.add(innerType?.["##STRUCT_CONSTURCTOR##"]?.() || defaultValue);
+                }
             });
 
         return List.#_constructor.call(this, ...params);
@@ -84,7 +89,9 @@ export default class List {
             let proxy = CACHE_T_PROXY.get(innerType);
             !proxy && CACHE_T_PROXY.set(innerType, proxy = new Proxy(List, {
                 get: (target, prop, receiver) => {
-                    if (prop === "##INNER_TYPE##") return innerType;
+                    if (prop === "##INNER_TYPE##") {
+                        return innerType;
+                    }
                     return target[prop];
                 }
             }));
@@ -98,23 +105,33 @@ export default class List {
     #initProxy() {
         return this.#proxy = new Proxy(this, {
             get: (target, prop, receiver) => {
-                if (prop === "@@INNER_TYPE@@") return this.#innerType;
+                if (prop === "@@INNER_TYPE@@") {
+                    return this.#innerType;
+                }
 
                 let result = null;
 
-                if (typeof prop === "symbol") result = this[prop];
-                else if (typeof prop === "string") {
-                    if (/^\d+$/.test(prop)) result = this.#list[prop];
-                    else result = this[prop];
+                if (typeof prop === "symbol") {
+                    result = this[prop];
+                } else if (typeof prop === "string") {
+                    if (/^\d+$/.test(prop)) {
+                        result = this.#list[prop];
+                    } else {
+                        result = this[prop];
+                    }
                 }
 
-                if (typeof result === "function") return result.bind(this);
+                if (typeof result === "function") {
+                    return result.bind(this);
+                }
 
                 return result;
             },
             set: (target, prop, value, receiver) => {
                 if (typeof prop === "string" && /^\d+$/.test(prop)) {
-                    if (prop >= this.#list.length) throw new Error(`Index ${prop} out of bounds, List length is ${this.#list.length}`);
+                    if (prop >= this.#list.length) {
+                        throw new Error(`索引 ${prop} 超出范围，列表长度为 ${this.#list.length}。`);
+                    }
 
                     overload([this.#innerType],
                         /**
@@ -127,7 +144,7 @@ export default class List {
                     return true;
                 }
 
-                throw new Error(`Cannot set property "${prop}" on List`);
+                throw new Error(`无法在此列表上设置属性 ${prop}。`);
             },
         });
     }
@@ -137,8 +154,13 @@ export default class List {
      * @throws {Error}
      */
     #rangeCheck(index) {
-        if (index < 0) throw new Error(`Index ${index} out of bounds, Index must be greater than or equal to 0`);
-        if (index >= this.#list.length) throw new Error(`Index ${index} out of bounds, List length is ${this.#list.length}`);
+        if (index < 0) {
+            throw new Error(`索引 ${index} 超出范围，索引必须大于或等于 0。`);
+        }
+
+        if (index >= this.#list.length) {
+            throw new Error(`索引 ${index} 超出范围，列表长度为 ${this.#list.length}。`);
+        }
     }
 
     [Symbol.iterator] = function* () {
@@ -167,14 +189,18 @@ export default class List {
              * @param {T[] | List<T>} list - 列表
              */
             function (list) {
-                for (let item of list) this.add(item);
-            }).add(["..."],
+                for (let item of list) {
+                    this.add(item);
+                }
+            }).any(
                 /**
                  * @this {List<T>}
                  * @param {T[]} items - 项目
                  */
                 function (...items) {
-                    for (let item of items) this.add(item);
+                    for (let item of items) {
+                        this.add(item);
+                    }
                 });
 
         return this.addRange(...params);
@@ -191,12 +217,14 @@ export default class List {
             function () {
                 return new Proxy(this, {
                     get: (target, prop, receiver) => {
-                        if (ignore.includes(prop)) throw new Error(`Cannot access method "${prop}" on read-only List`);
+                        if (ignore.includes(prop)) {
+                            throw new Error(`无法访问只读列表上的方法 ${prop}。`);
+                        }
 
                         return this.#proxy[prop];
                     },
                     set: (target, prop, value, receiver) => {
-                        throw new Error(`Cannot set property "${prop}" on read-only List`);
+                        throw new Error(`无法在只读列表上设置属性 ${prop}。`);
                     }
                 });
             });
@@ -215,8 +243,12 @@ export default class List {
                  * @type {List<T>}
                  */
                 const newList = new List(this.#innerType);
-                for (let item of this) newList.add(item);
-                for (let item of list) newList.add(item);
+                for (let item of this) {
+                    newList.add(item);
+                }
+                for (let item of list) {
+                    newList.add(item);
+                }
                 return newList;
             });
 
@@ -429,7 +461,9 @@ export default class List {
             function (index, list) {
                 this.#rangeCheck(index);
 
-                for (let item of list) this.insert(index++, item);
+                for (let item of list) {
+                    this.insert(index++, item);
+                }
             }).add([Number, "..."],
                 /**
                  * @this {List<T>}
@@ -439,7 +473,9 @@ export default class List {
                 function (index, ...items) {
                     this.#rangeCheck(index);
 
-                    for (let item of items) this.insert(index++, item);
+                    for (let item of items) {
+                        this.insert(index++, item);
+                    }
                 });
 
         return this.insertRange(...params);

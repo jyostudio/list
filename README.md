@@ -9,7 +9,7 @@
 ```HTML
 <script type="importmap">
   {
-    imports: {
+    "imports": {
       "@jyostudio/list": "https://unpkg.com/@jyostudio/list"
     }
   }
