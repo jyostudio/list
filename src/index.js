@@ -1,4 +1,5 @@
 import overload from "@jyostudio/overload";
+import JSONSchema from "@jyostudio/overload/dist/jsonSchema.js";
 
 /**
  * @template T
@@ -37,7 +38,7 @@ export default class List {
 
     static #_constructor = function (...params) {
         List.#_constructor = overload()
-            .add([Function],
+            .add([[Function, JSONSchema]],
                 /**
                  * @this {List<T>}
                  * @param {T} innerType - 内部类型
@@ -45,7 +46,7 @@ export default class List {
                 function (innerType) {
                     this.#innerType = innerType;
                 })
-            .add([Function, [Array, List.T(typeof params?.[0] === "function" ? params[0] : class { })]],
+            .add([[Function, JSONSchema], [Array, List.T(typeof params?.[0] === "function" ? params[0] : class { })]],
                 /**
                  * @this {List<T>}
                  * @param {T} innerType - 内部类型
@@ -57,7 +58,7 @@ export default class List {
                         this.add(item);
                     }
                 })
-            .add([Function, Number], function (innerType, count) {
+            .add([[Function, JSONSchema], Number], function (innerType, count) {
                 this.#innerType = innerType;
                 let defaultValue;
 
@@ -85,7 +86,7 @@ export default class List {
     static T(...params) {
         const CACHE_T_PROXY = new WeakMap();
 
-        List.T = overload([Function], function (innerType) {
+        List.T = overload([[Function, JSONSchema]], function (innerType) {
             let proxy = CACHE_T_PROXY.get(innerType);
             !proxy && CACHE_T_PROXY.set(innerType, proxy = new Proxy(List, {
                 get: (target, prop, receiver) => {
