@@ -1,6 +1,6 @@
 {
   "name": "@jyostudio/list",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "list",
   "source": "src/index.ts",
   "main": "dist/index.js",
