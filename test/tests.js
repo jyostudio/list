@@ -1,4 +1,4 @@
-import List from '../dist/index.js';
+import List from '../dist/list.js';
 
 const expect = window.chai.expect;
 

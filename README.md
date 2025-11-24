@@ -24,6 +24,29 @@ npm install @jyostudio/list
 
 根据环境引用后，用法完全一致，不需要在使用时区分引用地址和方式。
 
+## 构建版本说明
+
+本库提供两个构建版本：
+
+1.  **`dist/list.js`** (默认):
+    *   不包含 `JSONSchema` 依赖。
+    *   适用于不需要 JSON Schema 验证的场景，体积更小。
+    *   代码中的 `[Function, JSONSchema]` 已被替换为 `Function`。
+
+2.  **`dist/list-with-json-schema.js`**:
+    *   包含完整的 `JSONSchema` 支持。
+    *   如果你的项目依赖于 `@jyostudio/overload` 的 JSON Schema 功能，请使用此版本。
+
+可以通过修改引用路径来选择特定版本：
+
+```javascript
+// 默认引用 (list.js)
+import List from "@jyostudio/list";
+
+// 引用带 JSON Schema 的版本
+import List from "@jyostudio/list/dist/list-with-json-schema.js";
+```
+
 ## 用法
 
 ### 1. 创建列表
