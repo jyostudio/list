@@ -10,16 +10,17 @@
       "vendor"
     ],
     "include": [
-      "src/**/*.d.ts",
+      "src/**/*"
     ],
     "compilerOptions": {
       "target": "ESNext",
       "module": "ESNext",
       "moduleResolution": "Bundler",
-      "allowImportingTsExtensions": true,
       "customConditions": ["module"],
       "allowArbitraryExtensions": true,
-      "noEmit": true,
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "outDir": "dist",
       "allowJs": true,
       "checkJs": false,
       "verbatimModuleSyntax": true,

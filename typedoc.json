@@ -3,7 +3,7 @@
         "typedoc-github-theme"
     ],
     "entryPoints": [
-        "./src/index.d.ts"
+        "./src/index.ts"
     ],
     "out": "./docs",
     "lang": "zh",

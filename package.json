@@ -1,17 +1,17 @@
 {
   "name": "@jyostudio/list",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "list",
-  "source": "src/index.js",
+  "source": "src/index.ts",
   "main": "dist/index.js",
   "unpkg": "dist/index.js",
   "jsdelivr": "dist/index.js",
   "type": "module",
-  "types": "src/index.d.ts",
-  "typings": "src/index.d.ts",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "publish": "npm publish --access public",
-    "build": "esbuild src/index.js --bundle --minify --sourcemap --format=esm --outfile=dist/index.js",
+    "build": "tsc && esbuild src/index.ts --bundle --minify --sourcemap --format=esm --outfile=dist/index.js",
     "doc": "typedoc --options typedoc.json"
   },
   "repository": {
@@ -30,9 +30,10 @@
   "devDependencies": {
     "esbuild": "^0.25.8",
     "typedoc": "^0.26.11",
-    "typedoc-github-theme": "^0.1.2"
+    "typedoc-github-theme": "^0.1.2",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@jyostudio/overload": "^0.1.6"
+    "@jyostudio/overload": "^0.1.11"
   }
 }
