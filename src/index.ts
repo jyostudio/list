@@ -1,6 +1,14 @@
 import overload from "@jyostudio/overload";
 import JSONSchema from "@jyostudio/overload/dist/jsonSchema.js";
 
+export type ConstructorType<T> =
+    T extends string ? StringConstructor :
+    T extends number ? NumberConstructor :
+    T extends boolean ? BooleanConstructor :
+    T extends bigint ? BigIntConstructor :
+    T extends symbol ? SymbolConstructor :
+    abstract new (...args: any[]) => T;
+
 /**
  * 只读的强类型对象列表
  */
@@ -16,7 +24,7 @@ export abstract class ReadOnlyList<T> {
      * 获取指定元素类型的 List 类型
      * @param innerType 元素类型构造函数
      */
-    static T<T>(innerType: any): typeof List<T> {
+    static T<T>(innerType: ConstructorType<T>): typeof List<T> {
         throw new Error("Method not implemented.");
     }
 
@@ -46,7 +54,7 @@ export abstract class ReadOnlyList<T> {
      * @param converter 转换函数
      * @returns 转换后的 List
      */
-    abstract convertAll<U>(targetType: any, converter: (item: T) => U): List<U>;
+    abstract convertAll<U>(targetType: ConstructorType<U>, converter: (item: T) => U): List<U>;
 
     /**
      * 复制到一个数组
@@ -108,7 +116,7 @@ export abstract class ReadOnlyList<T> {
      * 获取内部元素类型
      * @returns 元素类型
      */
-    abstract getInnerType(): any;
+    abstract getInnerType(): ConstructorType<T>;
 
     /**
      * 搜索指定的对象，并返回整个 List 中第一个匹配项的从零开始的索引
@@ -171,7 +179,7 @@ export default class List<T> extends ReadOnlyList<T> {
     /**
      * 内部类型
      */
-    #innerType: any = null;
+    #innerType: ConstructorType<T> | null = null;
 
     /**
      * 代理
@@ -197,7 +205,7 @@ export default class List<T> extends ReadOnlyList<T> {
     }
 
     get [Symbol.toStringTag]() {
-        return `List<${this.#innerType.name}>`;
+        return `List<${this.#innerType!.name}>`;
     }
 
     static #_constructor = function (this: List<any>, ...params: any[]) {
@@ -236,19 +244,19 @@ export default class List<T> extends ReadOnlyList<T> {
      * 初始化 List 类的新实例
      * @param innerType 元素类型构造函数
      */
-    constructor(innerType: any);
+    constructor(innerType: ConstructorType<T>);
     /**
      * 初始化 List 类的新实例
      * @param innerType 元素类型构造函数
      * @param list 要复制的元素列表
      */
-    constructor(innerType: any, list: T[] | List<T>);
+    constructor(innerType: ConstructorType<T>, list: T[] | List<T>);
     /**
      * 初始化 List 类的新实例
      * @param innerType 元素类型构造函数
      * @param count 初始容量
      */
-    constructor(innerType: any, count: number);
+    constructor(innerType: ConstructorType<T>, count: number);
     constructor(...params: any[]) {
         super();
         (List.#_constructor as any).apply(this, params);
@@ -256,6 +264,7 @@ export default class List<T> extends ReadOnlyList<T> {
         return this.#initProxy();
     }
 
+    static T<T>(innerType: ConstructorType<T>): typeof List<T>;
     static T(...params: any[]): any {
         const CACHE_T_PROXY = new WeakMap();
 
@@ -455,7 +464,7 @@ export default class List<T> extends ReadOnlyList<T> {
                 /**
                  * @type {List<T>}
                  */
-                const newList = new List<T>(this.#innerType);
+                const newList = new List<T>(this.#innerType!);
                 for (let item of this) {
                     newList.add(item);
                 }
@@ -489,7 +498,7 @@ export default class List<T> extends ReadOnlyList<T> {
     clone(...params: any[]): List<T> {
         List.prototype.clone = overload([],
             function (this: List<T>) {
-                return new List<T>(this.#innerType, this);
+                return new List<T>(this.#innerType!, this);
             });
 
         return (this.clone as any)(...params);
@@ -516,7 +525,7 @@ export default class List<T> extends ReadOnlyList<T> {
      * @param converter 转换函数
      * @returns 转换后的 List
      */
-    convertAll<U>(targetType: any, converter: (item: T) => U): List<U>;
+    convertAll<U>(targetType: ConstructorType<U>, converter: (item: T) => U): List<U>;
     convertAll(...params: any[]): any {
         List.prototype.convertAll = overload([[Function, JSONSchema], Function],
             function (this: List<T>, targetType: any, converter: any) {
@@ -585,7 +594,7 @@ export default class List<T> extends ReadOnlyList<T> {
     findAll(...params: any[]): List<T> {
         List.prototype.findAll = overload([Function],
             function (this: List<T>, predicate: any) {
-                const result = new List<T>(this.#innerType);
+                const result = new List<T>(this.#innerType!);
                 for (let i = 0; i < this.#list.length; i++) {
                     if (predicate(this.#list[i])) {
                         result.add(this.#list[i]);
@@ -681,7 +690,7 @@ export default class List<T> extends ReadOnlyList<T> {
      * 获取内部元素类型
      * @returns 元素类型
      */
-    getInnerType(): any;
+    getInnerType(): ConstructorType<T>;
     getInnerType(...params: any[]): any {
         List.prototype.getInnerType = overload([],
             function (this: List<T>) {
@@ -888,7 +897,7 @@ export default class List<T> extends ReadOnlyList<T> {
     slice(...params: any[]): List<T> {
         List.prototype.slice = overload().add([Number, Number],
             function (this: List<T>, start: number, end: number) {
-                return new List<T>(this.#innerType, this.#list.slice(start, end));
+                return new List<T>(this.#innerType!, this.#list.slice(start, end));
             });
 
         return (this.slice as any)(...params);

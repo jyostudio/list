@@ -1,3 +1,4 @@
+export type ConstructorType<T> = T extends string ? StringConstructor : T extends number ? NumberConstructor : T extends boolean ? BooleanConstructor : T extends bigint ? BigIntConstructor : T extends symbol ? SymbolConstructor : abstract new (...args: any[]) => T;
 /**
  * 只读的强类型对象列表
  */
@@ -11,7 +12,7 @@ export declare abstract class ReadOnlyList<T> {
      * 获取指定元素类型的 List 类型
      * @param innerType 元素类型构造函数
      */
-    static T<T>(innerType: any): typeof List<T>;
+    static T<T>(innerType: ConstructorType<T>): typeof List<T>;
     /**
      * 合并两个 List
      * @param list 要合并的 List
@@ -35,7 +36,7 @@ export declare abstract class ReadOnlyList<T> {
      * @param converter 转换函数
      * @returns 转换后的 List
      */
-    abstract convertAll<U>(targetType: any, converter: (item: T) => U): List<U>;
+    abstract convertAll<U>(targetType: ConstructorType<U>, converter: (item: T) => U): List<U>;
     /**
      * 复制到一个数组
      * @param array 目标数组
@@ -88,7 +89,7 @@ export declare abstract class ReadOnlyList<T> {
      * 获取内部元素类型
      * @returns 元素类型
      */
-    abstract getInnerType(): any;
+    abstract getInnerType(): ConstructorType<T>;
     /**
      * 搜索指定的对象，并返回整个 List 中第一个匹配项的从零开始的索引
      * @param item 要搜索的元素
@@ -143,20 +144,20 @@ export default class List<T> extends ReadOnlyList<T> {
      * 初始化 List 类的新实例
      * @param innerType 元素类型构造函数
      */
-    constructor(innerType: any);
+    constructor(innerType: ConstructorType<T>);
     /**
      * 初始化 List 类的新实例
      * @param innerType 元素类型构造函数
      * @param list 要复制的元素列表
      */
-    constructor(innerType: any, list: T[] | List<T>);
+    constructor(innerType: ConstructorType<T>, list: T[] | List<T>);
     /**
      * 初始化 List 类的新实例
      * @param innerType 元素类型构造函数
      * @param count 初始容量
      */
-    constructor(innerType: any, count: number);
-    static T(...params: any[]): any;
+    constructor(innerType: ConstructorType<T>, count: number);
+    static T<T>(innerType: ConstructorType<T>): typeof List<T>;
     [Symbol.iterator]: (this: List<T>) => Generator<T, void, unknown>;
     /**
      * 添加一个元素
@@ -205,7 +206,7 @@ export default class List<T> extends ReadOnlyList<T> {
      * @param converter 转换函数
      * @returns 转换后的 List
      */
-    convertAll<U>(targetType: any, converter: (item: T) => U): List<U>;
+    convertAll<U>(targetType: ConstructorType<U>, converter: (item: T) => U): List<U>;
     /**
      * 复制到一个数组
      * @param array 目标数组
@@ -258,7 +259,7 @@ export default class List<T> extends ReadOnlyList<T> {
      * 获取内部元素类型
      * @returns 元素类型
      */
-    getInnerType(): any;
+    getInnerType(): ConstructorType<T>;
     /**
      * 将元素插入 List 的指定索引处
      * @param index 索引
