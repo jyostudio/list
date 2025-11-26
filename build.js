@@ -39,6 +39,14 @@ async function build() {
             fs.unlinkSync(tempFile);
         }
     }
+
+    // Copy index.d.ts to list-with-json-schema.d.ts
+    console.log('Copying index.d.ts to list-with-json-schema.d.ts...');
+    if (fs.existsSync('dist/index.d.ts')) {
+        fs.copyFileSync('dist/index.d.ts', 'dist/list-with-json-schema.d.ts');
+    } else {
+        console.warn('dist/index.d.ts not found. Make sure tsc runs before this script.');
+    }
 }
 
 build().catch(err => {
