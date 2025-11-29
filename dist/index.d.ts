@@ -1,9 +1,10 @@
 export type ConstructorType<T> = T extends string ? StringConstructor : T extends number ? NumberConstructor : T extends boolean ? BooleanConstructor : T extends bigint ? BigIntConstructor : T extends symbol ? SymbolConstructor : abstract new (...args: any[]) => T;
+export type NativeType<T> = T extends String ? string : T extends Number ? number : T extends Boolean ? boolean : T extends Symbol ? symbol : T extends BigInt ? bigint : T;
 /**
  * 只读的强类型对象列表
  */
 export declare abstract class ReadOnlyList<T> {
-    [index: number]: T;
+    [index: number]: NativeType<T>;
     /**
      * 获取包含的元素数
      */
@@ -18,7 +19,7 @@ export declare abstract class ReadOnlyList<T> {
      * @param list 要合并的 List
      * @returns 合并后的 List
      */
-    abstract concat(list: T[] | List<T>): List<T>;
+    abstract concat(list: NativeType<T>[] | List<T>): List<T>;
     /**
      * 复制一个 List
      * @returns 复制的 List
@@ -29,62 +30,62 @@ export declare abstract class ReadOnlyList<T> {
      * @param item 要判断的元素
      * @returns 是否包含
      */
-    abstract contains(item: T): boolean;
+    abstract contains(item: NativeType<T>): boolean;
     /**
      * 将当前 List 的元素转换为另一种类型，并返回包含转换后元素的 List
      * @param targetType 目标类型构造函数
      * @param converter 转换函数
      * @returns 转换后的 List
      */
-    abstract convertAll<U>(targetType: ConstructorType<U>, converter: (item: T) => U): List<U>;
+    abstract convertAll<U>(targetType: ConstructorType<U>, converter: (item: NativeType<T>) => U): List<U>;
     /**
      * 复制到一个数组
      * @param array 目标数组
      * @param arrayIndex 数组起始位置
      * @param count 复制数量
      */
-    abstract copyTo(array: T[], arrayIndex?: number, count?: number): void;
+    abstract copyTo(array: NativeType<T>[], arrayIndex?: number, count?: number): void;
     /**
      * 确定 List 中是否包含与指定谓词定义的条件匹配的元素
      * @param predicate 判断函数
      * @returns 是否包含
      */
-    abstract exists(predicate: (item: T) => boolean): boolean;
+    abstract exists(predicate: (item: NativeType<T>) => boolean): boolean;
     /**
      * 检索与指定谓词定义的条件匹配的所有元素
      * @param predicate 判断函数
      * @returns 包含所有匹配元素的 List
      */
-    abstract findAll(predicate: (item: T) => boolean): List<T>;
+    abstract findAll(predicate: (item: NativeType<T>) => boolean): List<T>;
     /**
      * 对 List 中每个元素执行指定操作
      * @param callback 操作函数
      */
-    abstract forEach(callback: (item: T, index: number, list: List<T>) => void): void;
+    abstract forEach(callback: (item: NativeType<T>, index: number, list: List<T>) => void): void;
     /**
      * 搜索与指定谓词所定义的条件相匹配的元素，并返回整个 List 中的第一个匹配元素
      * @param predicate 判断函数
      * @returns 符合条件的元素
      */
-    abstract find(predicate: (item: T) => boolean): T | undefined;
+    abstract find(predicate: (item: NativeType<T>) => boolean): NativeType<T> | undefined;
     /**
      * 搜索与指定谓词所定义的条件相匹配的元素，并返回整个 List 中的第一个匹配元素的从零开始的索引
      * @param predicate 判断函数
      * @returns 符合条件的元素索引
      */
-    abstract findIndex(predicate: (item: T) => boolean): number;
+    abstract findIndex(predicate: (item: NativeType<T>) => boolean): number;
     /**
      * 搜索与指定谓词所定义的条件相匹配的元素，并返回整个 List 中的最后一个匹配元素
      * @param predicate 判断函数
      * @returns 符合条件的元素
      */
-    abstract findLast(predicate: (item: T) => boolean): T | undefined;
+    abstract findLast(predicate: (item: NativeType<T>) => boolean): NativeType<T> | undefined;
     /**
      * 搜索与指定谓词所定义的条件相匹配的元素，并返回整个 List 中的最后一个匹配元素的从零开始的索引
      * @param predicate 判断函数
      * @returns 符合条件的元素索引
      */
-    abstract findLastIndex(predicate: (item: T) => boolean): number;
+    abstract findLastIndex(predicate: (item: NativeType<T>) => boolean): number;
     /**
      * 获取内部元素类型
      * @returns 元素类型
@@ -95,13 +96,13 @@ export declare abstract class ReadOnlyList<T> {
      * @param item 要搜索的元素
      * @returns 元素索引
      */
-    abstract indexOf(item: T): number;
+    abstract indexOf(item: NativeType<T>): number;
     /**
      * 搜索指定的对象，并返回整个 List 中最后一个匹配项的从零开始的索引
      * @param item 要搜索的元素
      * @returns 元素索引
      */
-    abstract lastIndexOf(item: T): number;
+    abstract lastIndexOf(item: NativeType<T>): number;
     /**
      * 在源 List 中创建元素范围的浅表副本
      * @param start 起始索引
@@ -113,13 +114,13 @@ export declare abstract class ReadOnlyList<T> {
      * 将整个 List 中的元素复制到新数组中
      * @returns 新数组
      */
-    abstract toArray(): T[];
+    abstract toArray(): NativeType<T>[];
     /**
      * 判断是否所有元素都符合条件
      * @param predicate 判断函数
      * @returns 是否所有元素都符合条件
      */
-    abstract trueForAll(predicate: (item: T) => boolean): boolean;
+    abstract trueForAll(predicate: (item: NativeType<T>) => boolean): boolean;
     /**
      * 串联 List 的成员，其中在每个成员之间使用指定的分隔符
      * @param separator 分隔符
@@ -150,7 +151,7 @@ export default class List<T> extends ReadOnlyList<T> {
      * @param innerType 元素类型构造函数
      * @param list 要复制的元素列表
      */
-    constructor(innerType: ConstructorType<T>, list: T[] | List<T>);
+    constructor(innerType: ConstructorType<T>, list: NativeType<T>[] | List<T>);
     /**
      * 初始化 List 类的新实例
      * @param innerType 元素类型构造函数
@@ -158,22 +159,22 @@ export default class List<T> extends ReadOnlyList<T> {
      */
     constructor(innerType: ConstructorType<T>, count: number);
     static T<T>(innerType: ConstructorType<T>): typeof List<T>;
-    [Symbol.iterator]: (this: List<T>) => Generator<T, void, unknown>;
+    [Symbol.iterator]: (this: List<T>) => Generator<NativeType<T>, void, unknown>;
     /**
      * 添加一个元素
      * @param item 要添加的元素
      */
-    add(item: T | null): void;
+    add(item: NativeType<T> | null): void;
     /**
      * 添加一组元素
      * @param list 要添加的元素列表
      */
-    addRange(list: T[] | List<T>): void;
+    addRange(list: NativeType<T>[] | List<T>): void;
     /**
      * 添加一组元素
      * @param items 要添加的元素列表
      */
-    addRange(...items: T[]): void;
+    addRange(...items: NativeType<T>[]): void;
     /**
      * 返回一个只读的 List
      * @returns 只读的 List
@@ -184,7 +185,7 @@ export default class List<T> extends ReadOnlyList<T> {
      * @param list 要合并的 List
      * @returns 合并后的 List
      */
-    concat(list: T[] | List<T>): List<T>;
+    concat(list: NativeType<T>[] | List<T>): List<T>;
     /**
      * 清空所有元素
      */
@@ -199,62 +200,62 @@ export default class List<T> extends ReadOnlyList<T> {
      * @param item 要判断的元素
      * @returns 是否包含
      */
-    contains(item: T): boolean;
+    contains(item: NativeType<T>): boolean;
     /**
      * 将当前 List 的元素转换为另一种类型，并返回包含转换后元素的 List
      * @param targetType 目标类型构造函数
      * @param converter 转换函数
      * @returns 转换后的 List
      */
-    convertAll<U>(targetType: ConstructorType<U>, converter: (item: T) => U): List<U>;
+    convertAll<U>(targetType: ConstructorType<U>, converter: (item: NativeType<T>) => U): List<U>;
     /**
      * 复制到一个数组
      * @param array 目标数组
      * @param arrayIndex 数组起始位置
      * @param count 复制数量
      */
-    copyTo(array: T[], arrayIndex?: number, count?: number): void;
+    copyTo(array: NativeType<T>[], arrayIndex?: number, count?: number): void;
     /**
      * 确定 List 中是否包含与指定谓词定义的条件匹配的元素
      * @param predicate 判断函数
      * @returns 是否包含
      */
-    exists(predicate: (item: T) => boolean): boolean;
+    exists(predicate: (item: NativeType<T>) => boolean): boolean;
     /**
      * 检索与指定谓词定义的条件匹配的所有元素
      * @param predicate 判断函数
      * @returns 包含所有匹配元素的 List
      */
-    findAll(predicate: (item: T) => boolean): List<T>;
+    findAll(predicate: (item: NativeType<T>) => boolean): List<T>;
     /**
      * 对 List 中每个元素执行指定操作
      * @param callback 操作函数
      */
-    forEach(callback: (item: T, index: number, list: List<T>) => void): void;
+    forEach(callback: (item: NativeType<T>, index: number, list: List<T>) => void): void;
     /**
      * 搜索与指定谓词所定义的条件相匹配的元素，并返回整个 List 中的第一个匹配元素
      * @param predicate 判断函数
      * @returns 符合条件的元素
      */
-    find(predicate: (item: T) => boolean): T | undefined;
+    find(predicate: (item: NativeType<T>) => boolean): NativeType<T> | undefined;
     /**
      * 搜索与指定谓词所定义的条件相匹配的元素，并返回整个 List 中的第一个匹配元素的从零开始的索引
      * @param predicate 判断函数
      * @returns 符合条件的元素索引
      */
-    findIndex(predicate: (item: T) => boolean): number;
+    findIndex(predicate: (item: NativeType<T>) => boolean): number;
     /**
      * 搜索与指定谓词所定义的条件相匹配的元素，并返回整个 List 中的最后一个匹配元素
      * @param predicate 判断函数
      * @returns 符合条件的元素
      */
-    findLast(predicate: (item: T) => boolean): T | undefined;
+    findLast(predicate: (item: NativeType<T>) => boolean): NativeType<T> | undefined;
     /**
      * 搜索与指定谓词所定义的条件相匹配的元素，并返回整个 List 中的最后一个匹配元素的从零开始的索引
      * @param predicate 判断函数
      * @returns 符合条件的元素索引
      */
-    findLastIndex(predicate: (item: T) => boolean): number;
+    findLastIndex(predicate: (item: NativeType<T>) => boolean): number;
     /**
      * 获取内部元素类型
      * @returns 元素类型
@@ -265,37 +266,37 @@ export default class List<T> extends ReadOnlyList<T> {
      * @param index 索引
      * @param item 要插入的元素
      */
-    insert(index: number, item: T | null): void;
+    insert(index: number, item: NativeType<T> | null): void;
     /**
      * 将集合的元素插入 List 的指定索引处
      * @param index 索引
      * @param list 要插入的元素列表
      */
-    insertRange(index: number, list: T[] | List<T>): void;
+    insertRange(index: number, list: NativeType<T>[] | List<T>): void;
     /**
      * 将集合的元素插入 List 的指定索引处
      * @param index 索引
      * @param items 要插入的元素列表
      */
-    insertRange(index: number, ...items: T[]): void;
+    insertRange(index: number, ...items: NativeType<T>[]): void;
     /**
      * 搜索指定的对象，并返回整个 List 中第一个匹配项的从零开始的索引
      * @param item 要搜索的元素
      * @returns 元素索引
      */
-    indexOf(item: T): number;
+    indexOf(item: NativeType<T>): number;
     /**
      * 搜索指定的对象，并返回整个 List 中最后一个匹配项的从零开始的索引
      * @param item 要搜索的元素
      * @returns 元素索引
      */
-    lastIndexOf(item: T): number;
+    lastIndexOf(item: NativeType<T>): number;
     /**
      * 从 List 中移除特定对象的第一个匹配项
      * @param item 要移除的元素
      * @returns 是否成功移除
      */
-    remove(item: T): boolean;
+    remove(item: NativeType<T>): boolean;
     /**
      * 移除 List 中指定索引处的元素
      * @param index 索引
@@ -306,7 +307,7 @@ export default class List<T> extends ReadOnlyList<T> {
      * @param predicate 判断函数
      * @returns 删除数量
      */
-    removeAll(predicate: (item: T) => boolean): number;
+    removeAll(predicate: (item: NativeType<T>) => boolean): number;
     /**
      * 移除 List 中指定索引处的元素
      * @param index 索引
@@ -338,18 +339,18 @@ export default class List<T> extends ReadOnlyList<T> {
      * 使用指定的比较器对整个 List 中的元素进行排序
      * @param compareFn 比较函数
      */
-    sort(compareFn: (a: T, b: T) => number): void;
+    sort(compareFn: (a: NativeType<T>, b: NativeType<T>) => number): void;
     /**
      * 将整个 List 中的元素复制到新数组中
      * @returns 新数组
      */
-    toArray(): T[];
+    toArray(): NativeType<T>[];
     /**
      * 判断是否所有元素都符合条件
      * @param predicate 判断函数
      * @returns 是否所有元素都符合条件
      */
-    trueForAll(predicate: (item: T) => boolean): boolean;
+    trueForAll(predicate: (item: NativeType<T>) => boolean): boolean;
     /**
      * 串联 List 的成员，其中在每个成员之间使用指定的分隔符
      * @param separator 分隔符
