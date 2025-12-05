@@ -241,7 +241,7 @@ export default class List<T> extends ReadOnlyList<T> {
                 else defaultValue = null;
 
                 for (let i = 0; i < count; i++) {
-                    this.add(innerType?.["##STRUCT_CONSTURCTOR##"]?.() || defaultValue);
+                    this.add(innerType?.["##STRUCT_CONSTRUCTOR##"]?.() || defaultValue);
                 }
             });
 
